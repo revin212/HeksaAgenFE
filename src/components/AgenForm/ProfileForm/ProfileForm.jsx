@@ -1,6 +1,7 @@
 import { Input, Stack, Typography } from '@mui/material';
 import { formStyle, inputStyle, inputDateStyle } from '../AgenFormStyles';
 import { SelectGender } from './SelectGender';
+import { dateToStringNumberMonth } from '../../../utils/DateUtils';
 
 export const ProfileForm = ({ data, setData }) => {
     const handleChange = (e) => {
@@ -28,7 +29,7 @@ export const ProfileForm = ({ data, setData }) => {
         <Stack gap={2}>
             <Typography>Birth Date</Typography>
             <input name="birthDate" id="birthDate" type="date" style={{...inputDateStyle, width: "250px",outline: 'none'}}
-            value={data.birthDate} 
+            value={dateToStringNumberMonth(new Date(data.birthDate))} 
             onChange={(e) =>setData({
                             ...data,
                             birthDate: e.target.value

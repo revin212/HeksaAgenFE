@@ -95,13 +95,13 @@ export const WorkForm = ({ data, setData }) => {
                     <Stack gap={2}>
                         <Typography>Start Date</Typography>
                         <input name="startDate" id={`startDateWork-input-${index}`} type="date" style={{...inputDateStyle, width: "250px",outline: 'none'}}
-                        value={ experience.startDate } 
+                        value={ dateToStringNumberMonth(new Date(experience.startDate)) } 
                         onChange={(e)=>handleChange(e, index)} />
                     </Stack>
                     <Stack gap={2}>
                         <Typography>End Date</Typography>
                         <input name="endDate" id={`endDateWork-input-${index}`} type="date" style={{...inputDateStyle, width: "250px",outline: 'none'}}
-                        value={ experience.endDate } 
+                        value={ dateToStringNumberMonth(new Date(experience.endDate)) } 
                         onChange={(e)=>handleChange(e, index)} />
                     </Stack>
                 </Stack>

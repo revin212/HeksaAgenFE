@@ -1,9 +1,9 @@
 import { Box, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { DescContactStyle, DescStyle, DescTitleStyle, ListWrapperStyle, TitleStyle, agen } from '../AgenDetailDescStyles'
+import { DescContactStyle, DescStyle, DescTitleStyle, ListWrapperStyle, TitleStyle } from '../AgenDetailDescStyles'
 import { dateToString } from '../../../utils/DateUtils'
 
-export const AgenProfile = () => {
+export const AgenProfile = ({ data }) => {
   return (
     <Stack gap='16px' sx={{flex:'40%'}}>
         <Typography variant='h2' sx={TitleStyle}>
@@ -18,7 +18,7 @@ export const AgenProfile = () => {
                 <Stack direction={'row'} gap='12px'>
                     <Typography variant='body1' sx={DescStyle} display={{xs:'none', sm:'block'}}>:</Typography>
                     <Typography variant='body1' sx={DescStyle} ml="4px" >
-                        {agen?.name}
+                        {data?.name}
                     </Typography>
                 </Stack>
             </Stack>
@@ -29,7 +29,7 @@ export const AgenProfile = () => {
                 <Stack direction={'row'} gap='12px'>
                     <Typography variant='body1' sx={DescStyle} display={{xs:'none', sm:'block'}}>:</Typography>
                     <Typography variant='body1' sx={DescStyle} ml="4px" >
-                        {agen?.gender}
+                        {data?.gender}
                     </Typography>
                 </Stack>
             </Stack>
@@ -40,7 +40,7 @@ export const AgenProfile = () => {
                 <Stack direction={'row'} gap='12px'>
                     <Typography variant='body1' sx={DescStyle} display={{xs:'none', sm:'block'}}>:</Typography>
                     <Typography variant='body1' sx={DescStyle} ml="4px" >
-                        {agen?.birthPlace}
+                        {data?.birthPlace}
                     </Typography>
                 </Stack>
             </Stack>
@@ -51,7 +51,7 @@ export const AgenProfile = () => {
                 <Stack direction={'row'} gap='12px'>
                     <Typography variant='body1' sx={DescStyle} display={{xs:'none', sm:'block'}}>:</Typography>
                     <Typography variant='body1' sx={DescStyle} ml="4px" >
-                        {dateToString(new Date(agen?.birthDate))}
+                        {dateToString(new Date(data?.birthDate))}
                     </Typography>
                 </Stack>
             </Stack>
@@ -64,7 +64,7 @@ export const AgenProfile = () => {
             <Stack direction={'row'} gap='12px'>
                 <Typography variant='body1' sx={DescStyle} display={{xs:'none', sm:'block'}}>:</Typography>
                 <Typography variant='body1' sx={DescStyle} ml="4px" >
-                    {agen?.address}
+                    {data?.address}
                 </Typography>
             </Stack>
             </Stack>
@@ -75,7 +75,7 @@ export const AgenProfile = () => {
                 <Stack direction={'row'} gap='12px'>
                     <Typography variant='body1' sx={DescStyle} display={{xs:'none', sm:'block'}}>:</Typography>
                     <Typography variant='body1' sx={DescContactStyle} ml="4px" >
-                        {agen?.email}
+                        {data?.email}
                     </Typography>
                 </Stack>
             </Stack>
@@ -86,7 +86,7 @@ export const AgenProfile = () => {
                 <Stack direction={'row'} gap='12px'>
                     <Typography variant='body1' sx={DescStyle} display={{xs:'none', sm:'block'}}>:</Typography>
                     <Typography variant='body1' sx={DescContactStyle} ml="4px" >
-                        {agen?.phone}
+                        {data?.phone}
                     </Typography>
                 </Stack>
             </Stack>
@@ -97,7 +97,7 @@ export const AgenProfile = () => {
                 <Stack direction={'row'} gap='12px'>
                     <Typography variant='body1' sx={DescStyle} display={{xs:'none', sm:'block'}}>:</Typography>
                     <Typography variant='body1' sx={DescStyle} ml="4px" >
-                        {agen?.idCard}
+                        {data?.idCard}
                     </Typography>
                 </Stack>
             </Stack>

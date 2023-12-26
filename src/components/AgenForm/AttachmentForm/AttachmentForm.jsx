@@ -29,7 +29,6 @@ export const AttachmentForm = ({ data, setData }) => {
             index
         )
     }
-    console.log(data)
 
     const handleAddAttachment = () => {
         setData({
@@ -77,16 +76,16 @@ export const AttachmentForm = ({ data, setData }) => {
 
   return (
     <>
-    <Button variant={'outlined'} sx={{maxWidth:'250px', mb:'2rem'}} onClick={handleAddAttachment}>
+    <Button variant={'outlined'} sx={{maxWidth:'200px', mb:'2rem'}} onClick={handleAddAttachment}>
         <Add sx={{mr:'8px'}} />
         Add Attachment
     </Button>
     <ModalDeleteForm modalDeleteOpen={modalDeleteOpen} setModalDeleteOpen={setModalDeleteOpen} handleDelete={handleDelete} deleteId={deleteId} />
 
-    <Typography component='form' sx={formStyle}>
+    <Typography component='form' sx={formStyle} >
     {data.attachments?.map((attachment, index)=> {
             return (
-                <Stack key={`attachment-${index+1}`} gap={2}>
+                <Stack key={`attachment-${index+1}`} gap={2} my={'2rem'}>
                     <Stack gap={2}>
                         <Stack direction={"row"} justifyContent={'space-between'}>
                         <Typography variant='h2' sx={titleStyle}>
@@ -121,6 +120,14 @@ export const AttachmentForm = ({ data, setData }) => {
                 </Stack>
             )
         })}
+        {!data.attachments || data.attachments.length == 0 && 
+            <Stack height={"300px"} justifyContent={'center'} alignItems={'center'}>
+                <Typography>
+                    No Attachment
+                </Typography>
+            </Stack>
+        }
+        
     </Typography>
     </>
   )

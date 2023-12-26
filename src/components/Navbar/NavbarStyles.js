@@ -1,9 +1,14 @@
 export const navbarWrapperStyle = {
     backgroundColor: 'primary.main',
     width: '100%',
-    height: '91.51px',
+    height: '80px',
     display: 'flex',
-    alignContent: 'center'
+    alignContent: 'center',
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100
 }
 
 export const navbarMenuListStyle = {

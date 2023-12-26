@@ -7,7 +7,7 @@ const Layout = () => {
     return(
         <div style={{minHeight:'100vh'}}>
             <Navbar />
-            <Box sx={{mx: {xs:'1rem', md:"auto"}, py:"3rem", maxWidth:{md:"1000px", xl:"1200px"}}}>
+            <Box sx={{mx: "auto", pt:"8rem",pb:"3rem", px:{xs:"1rem", sm:"2rem"}, maxWidth:{md:"1000px", xl:"1200px"}}}>
                 <Outlet />
             </Box>
         </div>

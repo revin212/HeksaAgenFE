@@ -108,7 +108,9 @@ export const DescStyle = {
     fontSize: '16px',
     fontWeight: '500',
     letterSpacing: '0em',
-    color: 'text.gray3',            
+    color: 'text.gray3',    
+    wordWrap: 'break-word',
+    maxWidth: 'calc(100vw - 45vw);',        
   }
 
   export const DescTitleStyle = {
@@ -133,7 +135,7 @@ export const DescStyle = {
     fontWeight: '500',
     letterSpacing: '0em',
     color: 'text.gray3',   
-    maxWidth: {xs:'calc(100% - 20px);', sm:'none'},    
+    maxWidth: {xs:'calc(100vw - 40vw);', sm:'calc(50vw - 35vw);', md:'none'},    
     wordWrap: 'break-word'
   }
 

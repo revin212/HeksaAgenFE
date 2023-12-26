@@ -32,7 +32,7 @@ export const AgenListPagination = () => {
       setPageNumber(0)
     }
 
-    const usersPerPage = 2;
+    const usersPerPage = 5;
     const pagesVisited = pageNumber * usersPerPage;
     
     const displayUsers = fetchedData

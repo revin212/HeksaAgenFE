@@ -6,7 +6,7 @@ const useGetData = () => {
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
 
-    const getData = async (url, variant, fileName) => {
+    const getData = async (url, variant, fileName, setFormData) => {
         try {
             setIsLoading(true);
             setError('');
@@ -15,6 +15,12 @@ const useGetData = () => {
                 {
                     const response = await axios.get(url);
                     setData(response.data);
+                    break;
+                }
+            case 'getAgenForEdit':
+                {
+                    const response = await axios.get(url);
+                    setFormData(response.data);
                     break;
                 }
             case 'downloadAttachment':

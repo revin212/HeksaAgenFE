@@ -1,5 +1,5 @@
 import { Box, Button, Stack, Step, StepLabel, Stepper, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ProfileForm } from '../../components/AgenForm/ProfileForm/ProfileForm'
 import { EducationForm } from '../../components/AgenForm/EducationForm/EducationForm'
 import { dateToStringNumberMonth } from '../../utils/DateUtils'
@@ -7,6 +7,8 @@ import { WorkForm } from '../../components/AgenForm/WorkForm/WorkForm'
 import { AttachmentForm } from '../../components/AgenForm/AttachmentForm/AttachmentForm'
 import { useParams } from 'react-router-dom'
 import usePostData from '../../hooks/usePostData'
+import usePutData from '../../hooks/usePutData'
+import useGetData from '../../hooks/useGetData'
 
 const steps = ["Profile", "Educations", "Work Experiences", "Attachments"]
 
@@ -56,18 +58,41 @@ export const AgenForm = ({ variant }) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const {postData, isLoading: postLoading, msg: postMsg, setMsg: setPostMsg, error: postError, setError: setPostError } = usePostData();
+  const {putData, isLoading: putLoading, msg: putMsg, setMsg: setPutMsg, error: putError, setError: setPutError } = usePutData();
+  const {getData, isLoading: getLoading, error: getError, setError: setGetError } = useGetData();
+
+  useEffect(()=>{
+    if(agenId)
+      getData(
+      `https://localhost:44366/api/Agen/GetAgenById?Id=${agenId}`,
+      "getAgenForEdit",
+      "", 
+      setData
+    );
+  },[agenId])
+
   const handleSubmit = (e) => {
     e.preventDefault();
     window.scrollTo(0, 0);
 
-    postData(
-      "https://localhost:44366/api/Agen/CreateAgen",
-      "createAgen",
-      data
-    )
+    if(variant = "Create"){
+      postData(
+        "https://localhost:44366/api/Agen/CreateAgen",
+        "createAgen",
+        data
+      )
+    }
+    
+    if(variant = "Edit"){
+      putData(
+        `https://localhost:44366/api/Agen/UpdateAgen?Id=${agenId}`,
+        "editAgen",
+        data
+      )
+    }
 }
 
-const {postData, isLoading: postLoading, msg: postMsg, setMsg: setPostMsg, error: postError, setError: setPostError } = usePostData();
 
   return (
     <Stack gap='32px'>
@@ -107,7 +132,11 @@ const {postData, isLoading: postLoading, msg: postMsg, setMsg: setPostMsg, error
         {!(activeStep === steps.length - 1) && 
         <Button variant={'contained'} onClick={handleNext} disabled={activeStep === steps.length - 1} sx={{px:4}} >Next</Button>
         }
-        {activeStep === steps.length - 1 && <Button variant={'contained'} onClick={handleSubmit} sx={{px:4}} >Submit</Button>}
+        {activeStep === steps.length - 1 && 
+        <Button variant={'contained'} onClick={handleSubmit} sx={{px:4}} disabled={postLoading || putLoading} >
+          Submit
+        </Button>
+        }
         </Stack>
     </Stack>
   )

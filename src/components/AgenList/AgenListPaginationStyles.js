@@ -25,6 +25,6 @@ export const GenderStyle = {
 export const ContactStyle = {
     fontSize: "16px",
     fontWeight: "500",
-    maxWidth: {xs:'calc(100% - 20px);', sm:'none'},
+    maxWidth: {xs:'calc(100vw - 40vw);', sm:'none'},
     wordWrap: 'break-word'
 }

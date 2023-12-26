@@ -1,9 +1,10 @@
-import { AttachmentOutlined, Cloud, ContentCopy, ContentCut, ContentPaste, Download } from '@mui/icons-material';
-import { Button, Divider, ListItemIcon, ListItemText, Menu, MenuItem, MenuList, Typography } from '@mui/material';
+import { AttachmentOutlined, Download } from '@mui/icons-material';
+import { Button, ListItemIcon, ListItemText, Menu, MenuItem, MenuList } from '@mui/material';
 import React, { useState } from 'react'
-import { AttachmentListStyle, agen } from '../AgenDetailDescStyles';
+import { AttachmentListStyle } from '../AgenDetailDescStyles';
+import useGetData from '../../../hooks/useGetData';
 
-export const Attachment = () => {
+export const Attachment = ({ data }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -12,6 +13,16 @@ export const Attachment = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const {getData, isLoading: getLoading, error: getError, setError: setGetError } = useGetData();
+
+  const handleDownload = (fileName) => {
+    getData(
+        `https://localhost:44366/api/Agen/DownloadAttachment?fileName=${fileName}`,
+        'downloadAttachment',
+        fileName
+    )
+}
 
   return (
     <div>
@@ -34,15 +45,18 @@ export const Attachment = () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuList>
-            { agen.attachments.map((attachment) => {
+        <MenuList sx={{padding:0, display:'flex', flexDirection:'column', alignItems:'center'}}>
+            { data.attachments && data?.attachments.map((attachment) => {
             return (
-                <MenuItem key={`attachment-${attachment.id}`} sx={AttachmentListStyle}>
+                <Button key={`attachment-${attachment.id}`} sx={{padding:0}} onClick={()=>handleDownload(attachment.fileName)}
+                disabled={getLoading}>
+                <MenuItem  sx={AttachmentListStyle}>
                     <ListItemText>{attachment.fileName}</ListItemText>
                     <ListItemIcon sx={{justifyContent: 'end'}}>
                         <Download fontSize="small" />
                     </ListItemIcon>
                 </MenuItem>
+                </Button>
             )})}
         </MenuList>
       </Menu>

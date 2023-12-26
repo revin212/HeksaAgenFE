@@ -16,6 +16,8 @@ export const Navbar = () => {
             <Link to='/create-agen' style={{padding: '10px', textDecoration:'none'}}>
               <Button variant='contained' sx={{
                 fontWeight: '500',
+                py: "8px",
+                px: 2
               }}>
                 Create Agen
               </Button>

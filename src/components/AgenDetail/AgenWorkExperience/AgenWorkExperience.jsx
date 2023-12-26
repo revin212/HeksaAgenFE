@@ -1,16 +1,16 @@
 import { Box, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { DescContactStyle, DescStyle, DescTitleStyle, ListTitleStyle, ListWrapperStyle, TitleStyle, agen } from '../AgenDetailDescStyles'
+import { DescContactStyle, DescStyle, DescTitleStyle, ListTitleStyle, ListWrapperStyle, TitleStyle } from '../AgenDetailDescStyles'
 import { dateToString } from '../../../utils/DateUtils'
 
-export const AgenWorkExperience = () => {
+export const AgenWorkExperience = ({ data }) => {
   return (
     <Stack gap='24px'>
         <Typography variant='h2' sx={TitleStyle}>
           Work Experiences
         </Typography>
         <Box sx={ListWrapperStyle}>
-        { agen.workExperiences.map((experience, index) => {
+        { data.workExperiences && data?.workExperiences.map((experience, index) => {
             return (
                 <Box key={`experience-${experience.id}`} sx={{mx:"8px", mb:"1rem", flex:"45%"}} >
                     <Typography variant='h3' sx={ListTitleStyle}>

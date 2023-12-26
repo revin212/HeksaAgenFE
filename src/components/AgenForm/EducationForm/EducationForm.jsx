@@ -96,13 +96,13 @@ export const EducationForm = ({ data, setData }) => {
                     <Stack gap={2}>
                         <Typography>Start Date</Typography>
                         <input name="startDate" id={`startDate-input-${index}`} type="date" style={{...inputDateStyle, width: "250px",outline: 'none'}}
-                        value={ education.startDate } 
+                        value={ dateToStringNumberMonth(new Date(education.startDate)) } 
                         onChange={(e)=>handleChange(e, index)} />
                     </Stack>
                     <Stack gap={2}>
                         <Typography>End Date</Typography>
                         <input name="endDate" id={`endDate-input-${index}`} type="date" style={{...inputDateStyle, width: "250px",outline: 'none'}}
-                        value={ education.endDate } 
+                        value={ dateToStringNumberMonth(new Date(education.endDate)) } 
                         onChange={(e)=>handleChange(e, index)} />
                     </Stack>
                 </Stack>

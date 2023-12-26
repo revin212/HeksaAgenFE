@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios'; 
+import { useNavigate } from 'react-router-dom';
 
 const usePostData = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [msg, setMsg] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const postData = async (url, variant, payload={}, header={}, data, setData, changeIndex) => {
         try {
@@ -16,6 +18,7 @@ const usePostData = () => {
             case 'createAgen':
                 {
                     setMsg(response.data);
+                    navigate('/')
                     break; 
                 }
             case 'uploadAttachment':
