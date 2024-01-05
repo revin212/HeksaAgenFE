@@ -6,7 +6,7 @@ const useGetData = () => {
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
 
-    const getData = async (url, variant, fileName, setFormData) => {
+    const getData = async (url, variant, fileName, setFormData, setAttachmentFileNames, setDeleteIndexArray, setUploadFiles) => {
         try {
             setIsLoading(true);
             setError('');
@@ -21,6 +21,11 @@ const useGetData = () => {
                 {
                     const response = await axios.get(url);
                     setFormData(response.data);
+                    if(response.data.attachments){
+                        setAttachmentFileNames(response.data.attachments?.map(attachment => attachment.fileName))
+                        setDeleteIndexArray(Array(response.data.attachments.length).fill(false))
+                        setUploadFiles(Array(response.data.attachments.length).fill(false))
+                    }
                     break;
                 }
             case 'downloadAttachment':

@@ -8,7 +8,7 @@ const useDeleteData = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const deleteData = async (url, variant, data, setData, deleteIndex) => {
+    const deleteData = async (url, variant, data, setData, deleteId) => {
         try {
             setIsLoading(true);
             setError('');
@@ -18,23 +18,13 @@ const useDeleteData = () => {
             case 'deleteAgen':
                 {
                     setMsg(response.data);
-                    setData(data.filter((agen)=>agen.id != deleteIndex))
+                    setData(data.filter((agen)=>agen.id != deleteId))
                     break; 
                 }
             case 'deleteAgenDetail':
                 {
                     navigate('/')
                     break; 
-                }
-            case 'deleteAttachment':
-                {
-                    setData({
-                        ...data,
-                        attachments: data.attachments.filter((attachment, index) => {
-                            return index != deleteIndex
-                        })
-                    })
-                    break;
                 }
             default: break;
             }

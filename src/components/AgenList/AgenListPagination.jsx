@@ -21,13 +21,13 @@ export const AgenListPagination = () => {
       getData("https://localhost:44366/api/Agen/GetAllAgen", "getAgen");
     },[])
 
-    const handleDelete = (deleteIndex)=>{
+    const handleDelete = ()=>{
       deleteData(
-        `https://localhost:44366/api/Agen/DeleteAgen?Id=${deleteIndex}`,
+        `https://localhost:44366/api/Agen/DeleteAgen?Id=${deleteId}`,
         "deleteAgen",
         fetchedData,
         setFetchedData,
-        deleteIndex
+        deleteId
       )
       setPageNumber(0)
     }
@@ -37,7 +37,7 @@ export const AgenListPagination = () => {
     
     const displayUsers = fetchedData
       .slice(pagesVisited, pagesVisited + usersPerPage)
-      .map((user) => {
+      .map((user, index) => {
         return (
                 <Box key={user.id} sx={AgenItemWrapperStyle} >
                     <Stack direction={'row'} justifyContent={'space-between'} alignItems={'start'}>
@@ -82,6 +82,7 @@ export const AgenListPagination = () => {
           previousLabel={"Previous"}
           nextLabel={"Next"}
           pageCount={pageCount}
+          forcePage={pageNumber}
           onPageChange={changePage}
           containerClassName={"paginationBttns"}
           previousLinkClassName={"previousBttn"}
@@ -89,7 +90,7 @@ export const AgenListPagination = () => {
           disabledClassName={"paginationDisabled"}
           activeClassName={"paginationActive"}
         />
-        <ModalDeleteAgen modalDeleteOpen={modalDeleteOpen} setModalDeleteOpen={setModalDeleteOpen} handleDelete={handleDelete} deleteId={deleteId} />
+        <ModalDeleteAgen modalDeleteOpen={modalDeleteOpen} setModalDeleteOpen={setModalDeleteOpen} handleDelete={handleDelete} />
       </div>
     );
 }

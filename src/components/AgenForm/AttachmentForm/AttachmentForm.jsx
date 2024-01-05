@@ -1,33 +1,46 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { formStyle, titleStyle,  } from '../AgenFormStyles';
 import usePostData from '../../../hooks/usePostData';
-import useDeleteData from '../../../hooks/useDeleteData';
 import useGetData from '../../../hooks/useGetData';
 import { useState } from 'react';
 import { Add, DeleteForever } from '@mui/icons-material';
 import { ModalDeleteForm } from '../ModalDeleteForm/ModalDeleteForm';
 
 
-export const AttachmentForm = ({ data, setData }) => {
+export const AttachmentForm = ({ data, setData, attachmentFileNames, deleteIndexArray, setDeleteIndexArray, uploadFiles, setUploadFiles }) => {
     const [deleteId, setDeleteId] = useState(null);
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
 
     const {getData, isLoading: getLoading, data: fetchedData, setData: setFetchedData, error: getError, setError: setGetError } = useGetData();
-    const {postData, isLoading: postLoading, msg: postMsg, setMsg: setPostMsg, error: postError, setError: setPostError } = usePostData();
-    const {deleteData, isLoading: deleteLoading, msg: deleteMsg, setMsg: setDeleteMsg, error: deleteError, setError: setDeleteError } = useDeleteData();
 
-    const handleUploadImage = (e, index) => {
-        const formData = new FormData();
-        formData.append("attachmentFile", e.target.files[0])
-        postData(
-            "https://localhost:44366/api/Agen/UploadAttachment",
-            "uploadAttachment",
-            formData,
-            {"Content-Type": "multipart/form-data; boundary=<calculated when request is sent>"},
-            data,
-            setData,
-            index
-        )
+    const handleUploadImage = (e, changeIndex) => {
+        if(attachmentFileNames.includes(data.attachments[changeIndex]?.fileName)){
+            setDeleteIndexArray(deleteIndexArray?.map((deleteState, index)=> {
+                if(index == changeIndex){
+                    return true
+                } else return deleteState
+            } ))
+        }
+
+        setData({
+            ...data,
+            attachments: data.attachments.map((attachment, index)=>{
+                if(index == changeIndex){
+                    attachment = {
+                        ...attachment,
+                        fileName: e.target.files[0].name,
+                    }
+                    return attachment
+                }
+                else return attachment
+            })
+        })
+
+        setUploadFiles(uploadFiles?.map((uploadState, index)=> {
+            if(index == changeIndex){
+                return e.target.files[0]
+            } else return uploadState
+        } ))
     }
 
     const handleAddAttachment = () => {
@@ -43,25 +56,30 @@ export const AttachmentForm = ({ data, setData }) => {
                 }
             ]
         })
+        setUploadFiles([
+            ...uploadFiles,
+            false
+        ])
         setTimeout(()=>window.scrollTo(0, document.body.scrollHeight),50)
     }
 
     const handleDelete = (deleteIndex) => {
-        if(data.attachments[deleteIndex].fileName){
-        deleteData(
-            `https://localhost:44366/api/Agen/DeleteAttachment?attachmentFileName=${data.attachments[deleteIndex].fileName}`,
-            'deleteAttachment',
-            data,
-            setData,
-            deleteIndex
-        )
-        } else
         setData({
             ...data,
             attachments: data.attachments.filter((attachment, index) => {
                 return index != deleteIndex
             })
         })
+        if(attachmentFileNames.includes(data.attachments[deleteIndex]?.fileName)){
+            setDeleteIndexArray(deleteIndexArray?.map((deleteState, index)=> {
+                if(index == deleteIndex){
+                    return true
+                } else return deleteState
+            } ))
+        }
+        setUploadFiles(uploadFiles?.filter((file, index) => {
+            return index != deleteIndex
+        }))
     }
 
     const handleDownload = (downloadIndex) => {
@@ -91,7 +109,7 @@ export const AttachmentForm = ({ data, setData }) => {
                         <Typography variant='h2' sx={titleStyle}>
                         Attachment {index+1}
                         </Typography>
-                        <button type="button" style={{padding:'8px', border:'none', display:'flex', justifyContent:'center', cursor:'pointer', background:'transparent'}} disabled={postLoading}
+                        <button type="button" style={{padding:'8px', border:'none', display:'flex', justifyContent:'center', cursor:'pointer', background:'transparent'}} 
                         onClick={()=>{
                             setDeleteId(index)
                             setModalDeleteOpen(true)}}
@@ -102,7 +120,6 @@ export const AttachmentForm = ({ data, setData }) => {
                     </Stack>
                     <Stack gap={2}>
                         <input
-                        disabled={postLoading}
                         type="file"
                         name={`attachment-${index}`}
                         onChange={(e)=>handleUploadImage(e, index)}
@@ -111,7 +128,7 @@ export const AttachmentForm = ({ data, setData }) => {
                     </Stack>
                     {attachment.fileName != "" ? 
                     <Stack>
-                        <Button variant='contained' type="button" disabled={postLoading} 
+                        <Button variant='contained' type="button" 
                         onClick={()=>handleDownload(index)}
                         sx={{maxWidth:'120px', px:2, py:1}}
                         >Download</Button>

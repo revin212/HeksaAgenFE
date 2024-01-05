@@ -47,6 +47,10 @@ export const AgenForm = ({ variant }) => {
       filePath: ""
     }]
   })
+  const [uploadFiles, setUploadFiles] = useState([false]);
+  const [attachmentFileNames, setAttachmentFileNames] = useState([]);
+  const [deleteIndexArray, setDeleteIndexArray] = useState([]);
+
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -62,33 +66,101 @@ export const AgenForm = ({ variant }) => {
   const {putData, isLoading: putLoading, msg: putMsg, setMsg: setPutMsg, error: putError, setError: setPutError } = usePutData();
   const {getData, isLoading: getLoading, error: getError, setError: setGetError } = useGetData();
 
+
   useEffect(()=>{
-    if(agenId)
+    if(agenId){
       getData(
       `https://localhost:44366/api/Agen/GetAgenById?Id=${agenId}`,
       "getAgenForEdit",
       "", 
-      setData
-    );
+      setData,
+      setAttachmentFileNames,
+      setDeleteIndexArray,
+      setUploadFiles
+      )
+    } 
+    else {
+      setData({
+        name: '',
+        gender: '',
+        birthPlace: '',
+        birthDate: dateToStringNumberMonth(new Date()),
+        address: '',
+        email: '',
+        phone: '',
+        idCard: '',
+        educations: [{
+          strata: "",
+          institution: "",
+          major: "",
+          gpa: "",
+          startDate: dateToStringNumberMonth(new Date()),
+          endDate: dateToStringNumberMonth(new Date())
+        }],
+        workExperiences: [{
+          company : "",
+          field : "",
+          position : "",
+          startDate : dateToStringNumberMonth(new Date()),
+          endDate : dateToStringNumberMonth(new Date()),
+          jobDesc : ""
+        }],
+        attachments: [{
+          attachmentType : "",
+          fileType : "",
+          fileName: "",
+          filePath: ""
+        }]
+      })
+    }
   },[agenId])
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     window.scrollTo(0, 0);
 
-    if(variant = "Create"){
+    let formData = null
+    let deleteAttachments = null
+
+    if(uploadFiles.length > 0 && !uploadFiles.every(element => element === false)){
+      formData = new FormData();
+      uploadFiles.forEach((file) => {
+        
+        if(file != false){
+          formData.append(`attachmentFiles`, file)
+        }
+      })
+    }
+
+    if(deleteIndexArray.length > 0 && deleteIndexArray.includes(true)){
+      deleteAttachments = {
+        attachmentFileNames: attachmentFileNames,
+        deleteIndex: deleteIndexArray
+      }
+    }
+    
+    if(variant = "Create" && !agenId){
       postData(
         "https://localhost:44366/api/Agen/CreateAgen",
         "createAgen",
-        data
+        "https://localhost:44366/api/Agen/UploadAttachments",
+        data,
+        setData,
+        formData
       )
     }
     
-    if(variant = "Edit"){
+    if(variant = "Edit" && agenId){
       putData(
         `https://localhost:44366/api/Agen/UpdateAgen?Id=${agenId}`,
         "editAgen",
-        data
+        "https://localhost:44366/api/Agen/UploadAttachments",
+        data,
+        setData,
+        formData,
+        "https://localhost:44366/api/Agen/DeleteAttachments",
+        deleteAttachments
       )
     }
 }
@@ -125,7 +197,7 @@ export const AgenForm = ({ variant }) => {
         {activeStep == 0 && <ProfileForm data={data} setData={setData} />}
         {activeStep == 1 && <EducationForm data={data} setData={setData} />}
         {activeStep == 2 && <WorkForm data={data} setData={setData} />}
-        {activeStep == 3 && <AttachmentForm data={data} setData={setData} />}
+        {activeStep == 3 && <AttachmentForm data={data} setData={setData} attachmentFileNames={attachmentFileNames} deleteIndexArray={deleteIndexArray} setDeleteIndexArray={setDeleteIndexArray} uploadFiles={uploadFiles} setUploadFiles={setUploadFiles} />}
         
         <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} mt={6}>
         <Button variant={'outlined'} onClick={handleBack} disabled={activeStep === 0} sx={{px:4}} >Back</Button>

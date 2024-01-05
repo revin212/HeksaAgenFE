@@ -46,6 +46,11 @@ export const Attachment = ({ data }) => {
         }}
       >
         <MenuList sx={{padding:0, display:'flex', flexDirection:'column', alignItems:'center'}}>
+            { !data.attachments && 
+                <MenuItem  sx={AttachmentListStyle}>
+                    <ListItemText>No attachment</ListItemText>
+                </MenuItem>
+             }
             { data.attachments && data?.attachments.map((attachment) => {
             return (
                 <Button key={`attachment-${attachment.id}`} sx={{padding:0}} onClick={()=>handleDownload(attachment.fileName)}

@@ -2,7 +2,7 @@ import { Box, Button, Modal, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { buttonStyle, modalContentStyle, titleStyle } from './ModalDeleteAgenStyles';
 
-export const ModalDeleteAgen = ({ modalDeleteOpen, setModalDeleteOpen, deleteLoading, handleDelete, deleteId }) => {
+export const ModalDeleteAgen = ({ modalDeleteOpen, setModalDeleteOpen, deleteLoading, handleDelete }) => {
   return (
     <Modal 
         open={modalDeleteOpen}
@@ -21,7 +21,7 @@ export const ModalDeleteAgen = ({ modalDeleteOpen, setModalDeleteOpen, deleteLoa
                     Batal
                 </Button>
                 <Button disabled={deleteLoading} variant='contained' sx={buttonStyle} onClick={()=>{
-                    handleDelete(deleteId)
+                    handleDelete()
                     setModalDeleteOpen(false)
                     }}>
                     Hapus

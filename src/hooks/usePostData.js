@@ -8,36 +8,40 @@ const usePostData = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const postData = async (url, variant, payload={}, header={}, data, setData, changeIndex) => {
+    const postData = async (url, variant, uploadUrl, payload={}, setData, uploadPayload) => {
         try {
             setIsLoading(true);
             setError('');
             setMsg('');
-            const response = await axios.post(url, payload, {headers: header});
             switch(variant){
             case 'createAgen':
                 {
+                    if(uploadPayload){
+                        const uploadResponse = await axios.post(uploadUrl, uploadPayload, {headers: {"Content-Type": "multipart/form-data; boundary=<calculated when request is sent>"}});
+                        let tempAttachments = [...payload.attachments]
+                        for(let i=0; i < uploadResponse.data.length; i++){
+                            for(let j=0; j < tempAttachments.length; j++){
+                                if(tempAttachments[j].fileName == uploadResponse.data[i].fileName)
+                                {
+                                    tempAttachments[j].attachmentType = uploadResponse.data[i].attachmentType;
+                                    tempAttachments[j].fileType = uploadResponse.data[i].fileType;
+                                    tempAttachments[j].fileName = uploadResponse.data[i].fileName;
+                                    tempAttachments[j].filePath = uploadResponse.data[i].filePath;
+                                }
+                            }
+                        }
+                        setData(
+                            {
+                                ...payload,
+                                attachments: tempAttachments
+                            }
+                        )
+                    }
+                    
+                    await setTimeout(()=>{}, 100)
+                    const response = await axios.post(url, payload);
                     setMsg(response.data);
                     navigate('/')
-                    break; 
-                }
-            case 'uploadAttachment':
-                {
-                    setData({
-                        ...data,
-                        attachments: data.attachments.map((attachment, index)=>{
-                            if(index == changeIndex){
-                                attachment = {
-                                    attachmentType : response.data.attachmentType,
-                                    fileType : response.data.fileType,
-                                    fileName: response.data.fileName,
-                                    filePath: response.data.filePath
-                                }
-                                return attachment
-                            }
-                            else return attachment
-                        })
-                    })
                     break;
                 }
             default: break;
@@ -48,7 +52,7 @@ const usePostData = () => {
                 setMsg('')
                 setError(err.response.data)
             } else 
-            { 
+            {
                 setError("Server error, please try again") 
             }
         } finally { setIsLoading(false) }
