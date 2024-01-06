@@ -10,7 +10,7 @@ import useGetData from '../../hooks/useGetData';
 import useDeleteData from '../../hooks/useDeleteData';
 
 export const AgenListPagination = () => {
-    const [pageNumber, setPageNumber] = useState(0);
+    const [pageNumber, setPageNumber] = useState(-1);
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
 
@@ -18,16 +18,28 @@ export const AgenListPagination = () => {
     const {deleteData, isLoading: deleteLoading, msg: deleteMsg, setMsg: setDeleteMsg, error: deleteError, setError: setDeleteError } = useDeleteData();
 
     useEffect(()=>{
-      getData("https://localhost:44366/api/Agen/GetAllAgen", "getAgen");
+      getData("https://localhost:44366/api/Agen/GetAllAgen", "getAllAgen", null, setPageNumber);
     },[])
 
     const handleDelete = ()=>{
+      const deleteIndex = fetchedData.map(agen=>agen.id).indexOf(deleteId)
+      let deleteAttachments = null
+
+      if(fetchedData[deleteIndex].attachments.length > 0){
+        deleteAttachments = {
+          attachmentFileNames: fetchedData[deleteIndex].attachments?.map(attachment=>attachment.fileName),
+          deleteIndex: Array(fetchedData[deleteIndex].attachments?.length).fill(true)
+        }
+      }
+
       deleteData(
         `https://localhost:44366/api/Agen/DeleteAgen?Id=${deleteId}`,
         "deleteAgen",
         fetchedData,
         setFetchedData,
-        deleteId
+        deleteId,
+        "https://localhost:44366/api/Agen/DeleteAttachments",
+        deleteAttachments
       )
       setPageNumber(0)
     }

@@ -11,6 +11,13 @@ const useGetData = () => {
             setIsLoading(true);
             setError('');
             switch(variant){
+            case 'getAllAgen':
+                {
+                    const response = await axios.get(url);
+                    setData(response.data);
+                    setFormData(0);
+                    break;
+                }
             case 'getAgen':
                 {
                     const response = await axios.get(url);

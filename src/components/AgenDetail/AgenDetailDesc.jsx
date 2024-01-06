@@ -9,15 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import useGetData from '../../hooks/useGetData'
 import useDeleteData from '../../hooks/useDeleteData'
 
-export const AgenDetailDesc = () => {
-  const {agenId} = useParams();
-
-  const {getData, isLoading: getLoading, data, setData, error: getError, setError: setGetError } = useGetData();
-
-  useEffect(()=>{
-    getData(`https://localhost:44366/api/Agen/GetAgenById?Id=${agenId}`, "getAgen");
-  },[])
-
+export const AgenDetailDesc = ({ data }) => {
   return (
     <Stack gap={0}>
         <Stack direction={'row'} sx={{width:'100%', justifyContent:"end"}}>

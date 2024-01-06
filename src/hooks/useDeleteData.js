@@ -8,11 +8,14 @@ const useDeleteData = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const deleteData = async (url, variant, data, setData, deleteId) => {
+    const deleteData = async (url, variant, data, setData, deleteId, deleteUrl, deleteAttachments) => {
         try {
             setIsLoading(true);
             setError('');
             setMsg('');
+            if(deleteAttachments){
+                await axios.delete(deleteUrl, {data: deleteAttachments});
+            }
             const response = await axios.delete(url);
             switch(variant){
             case 'deleteAgen':
