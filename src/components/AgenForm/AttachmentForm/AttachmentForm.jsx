@@ -29,6 +29,7 @@ export const AttachmentForm = ({ data, setData, attachmentFileNames, deleteIndex
                     attachment = {
                         ...attachment,
                         fileName: e.target.files[0].name,
+                        filePath: ''
                     }
                     return attachment
                 }
@@ -126,9 +127,9 @@ export const AttachmentForm = ({ data, setData, attachmentFileNames, deleteIndex
                         />
                         <Typography>{ attachment.fileName }</Typography>
                     </Stack>
-                    {attachment.fileName != "" ? 
+                    {attachment.filePath != "" ? 
                     <Stack>
-                        <Button variant='contained' type="button" 
+                        <Button variant='contained' type="button"
                         onClick={()=>handleDownload(index)}
                         sx={{maxWidth:'120px', px:2, py:1}}
                         >Download</Button>
